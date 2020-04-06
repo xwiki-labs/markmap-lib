@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500"><style>a {
+  fill: #0097e6;
+}
+a:hover {
+  fill: #00a8ff;
+}
+path {
+  fill: none;
+}
+text {
+  font: 300 16px sans-serif
+}
+tspan.markmap-em {
+  font-style: italic;
+}
+tspan.markmap-strong {
+  font-weight: 500;
+}
+g &gt; g {
+  cursor: pointer;
+}
+</style><g transform="translate(68.00819396972656,225.796875) scale(2)"><path d="M105.47187805175781,10C145.4718780517578,10,145.4718780517578,-27.5,185.4718780517578,-27.5" stroke="rgb(31, 119, 180)" stroke-width="2"></path><path d="M105.47187805175781,10C145.4718780517578,10,145.4718780517578,-2.5,185.4718780517578,-2.5" stroke="rgb(255, 127, 14)" stroke-width="2"></path><path d="M105.47187805175781,10C145.4718780517578,10,145.4718780517578,22.5,185.4718780517578,22.5" stroke="rgb(44, 160, 44)" stroke-width="2"></path><path d="M105.47187805175781,10C145.4718780517578,10,145.4718780517578,47.5,185.4718780517578,47.5" stroke="rgb(214, 39, 40)" stroke-width="2"></path><g transform="translate(185.4718780517578, 47.5)"><rect y="-1" x="-1" width="91.51992797851562" height="2" fill="rgb(214, 39, 40)"></rect><text x="8" y="-4" text-anchor="start" fill-opacity="1"><tspan class="">interactive</tspan></text></g><g transform="translate(185.4718780517578, 22.5)"><rect y="-1" x="-1" width="51.7919921875" height="2" fill="rgb(44, 160, 44)"></rect><text x="8" y="-4" text-anchor="start" fill-opacity="1"><tspan class="">easy</tspan></text></g><g transform="translate(185.4718780517578, -2.5)"><rect y="-1" x="-1" width="60.68797302246094" height="2" fill="rgb(255, 127, 14)"></rect><text x="8" y="-4" text-anchor="start" fill-opacity="1"><tspan class="">useful</tspan></text></g><g transform="translate(185.4718780517578, -27.5)"><rect y="-1" x="-1" width="55.05595397949219" height="2" fill="rgb(31, 119, 180)"></rect><text x="8" y="-4" text-anchor="start" fill-opacity="1"><tspan class="">great</tspan></text></g><g transform="translate(0,10)"><rect y="-1" x="-1" width="107.47187805175781" height="4" fill="rgb(31, 119, 180)"></rect><circle stroke-width="1.5" r="6" cx="105.47187805175781" stroke="rgb(31, 119, 180)" fill="rgb(255, 255, 255)"></circle><text x="8" y="-4" text-anchor="start" fill-opacity="1"><tspan class="">markmap-lib</tspan></text></g></g></svg>
