@@ -22,7 +22,7 @@ import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
 import 'core-js/modules/web.url';
-import { y as createCommonjsModule, G as _toConsumableArray, z as unwrapExports, S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, N as onMount, O as onDestroy, v as validate_slots, Q as binding_callbacks, X as bind, a as space, e as element, c as create_component, P as svg_element, t as text, q as query_selector_all, b as detach_dev, f as claim_space, g as claim_element, h as children, k as claim_component, j as claim_text, m as attr_dev, l as add_location, n as insert_dev, o as append_dev, p as mount_component, V as run_all, T as listen_dev, Y as is_function, W as prevent_default, Z as add_flush_callback, u as transition_in, w as transition_out, x as destroy_component, M as globals } from './client.fd9e4121.js';
+import { y as createCommonjsModule, G as _toConsumableArray, z as unwrapExports, S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, N as onMount, O as onDestroy, v as validate_slots, Q as binding_callbacks, X as bind, a as space, e as element, c as create_component, P as svg_element, t as text, q as query_selector_all, b as detach_dev, f as claim_space, g as claim_element, h as children, k as claim_component, j as claim_text, m as attr_dev, l as add_location, n as insert_dev, o as append_dev, p as mount_component, V as run_all, T as listen_dev, Y as is_function, W as prevent_default, Z as add_flush_callback, u as transition_in, w as transition_out, x as destroy_component, M as globals } from './client.1f6480ea.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.async-iterator';
@@ -53,7 +53,7 @@ import 'core-js/modules/es.function.bind';
 import 'core-js/modules/es.object.define-property';
 import 'core-js/modules/es.object.get-own-property-descriptor';
 import 'core-js/modules/es.weak-map';
-import { u as util, p as plugins, M as Markmap_1, a as lodash_debounce, t as transform_3 } from './markmap.57f2e406.js';
+import { u as util, p as plugins, M as Markmap_1, a as lodash_debounce, t as transform_3 } from './markmap.6619b1bc.js';
 import 'core-js/modules/es.array.sort';
 import 'core-js/modules/es.string.trim';
 import 'core-js/modules/es.regexp.constructor';
@@ -191,19 +191,19 @@ function create_fragment(ctx) {
 	let dispose;
 
 	function markmap_el_binding(value) {
-		/*markmap_el_binding*/ ctx[10].call(null, value);
+		/*markmap_el_binding*/ ctx[11].call(null, value);
 	}
 
 	function markmap_onReset_binding(value) {
-		/*markmap_onReset_binding*/ ctx[11].call(null, value);
+		/*markmap_onReset_binding*/ ctx[12].call(null, value);
 	}
 
 	function markmap_onZoomIn_binding(value) {
-		/*markmap_onZoomIn_binding*/ ctx[12].call(null, value);
+		/*markmap_onZoomIn_binding*/ ctx[13].call(null, value);
 	}
 
 	function markmap_onZoomOut_binding(value) {
-		/*markmap_onZoomOut_binding*/ ctx[13].call(null, value);
+		/*markmap_onZoomOut_binding*/ ctx[14].call(null, value);
 	}
 
 	let markmap_props = { content: /*content*/ ctx[2] };
@@ -393,72 +393,72 @@ function create_fragment(ctx) {
 		h: function hydrate() {
 			document_1.title = "Try Markmap";
 			attr_dev(div0, "class", "flex-1 min-w-0 border border-gray-300");
-			add_location(div0, file, 97, 2, 2105);
+			add_location(div0, file, 99, 2, 2117);
 			attr_dev(circle0, "cx", "10");
 			attr_dev(circle0, "cy", "10");
 			attr_dev(circle0, "r", "9");
 			attr_dev(circle0, "fill", "none");
 			attr_dev(circle0, "stroke-width", "0.5");
 			attr_dev(circle0, "stroke", "currentColor");
-			add_location(circle0, file, 109, 10, 2594);
+			add_location(circle0, file, 111, 10, 2606);
 			attr_dev(path0, "fill", "none");
 			attr_dev(path0, "stroke-width", "1");
 			attr_dev(path0, "stroke", "currentColor");
 			attr_dev(path0, "d", "M10 6 v8 M6 10 h8");
-			add_location(path0, file, 110, 10, 2690);
+			add_location(path0, file, 112, 10, 2702);
 			attr_dev(svg0, "width", "20");
 			attr_dev(svg0, "height", "20");
 			attr_dev(svg0, "viewBox", "0 0 20 20");
-			add_location(svg0, file, 108, 8, 2515);
+			add_location(svg0, file, 110, 8, 2527);
 			attr_dev(circle1, "cx", "10");
 			attr_dev(circle1, "cy", "10");
 			attr_dev(circle1, "r", "9");
 			attr_dev(circle1, "fill", "none");
 			attr_dev(circle1, "stroke-width", "0.5");
 			attr_dev(circle1, "stroke", "currentColor");
-			add_location(circle1, file, 118, 10, 2933);
+			add_location(circle1, file, 120, 10, 2945);
 			attr_dev(path1, "fill", "none");
 			attr_dev(path1, "stroke-width", "1");
 			attr_dev(path1, "stroke", "currentColor");
 			attr_dev(path1, "d", "M6 10 h8");
-			add_location(path1, file, 119, 10, 3029);
+			add_location(path1, file, 121, 10, 3041);
 			attr_dev(svg1, "width", "20");
 			attr_dev(svg1, "height", "20");
 			attr_dev(svg1, "viewBox", "0 0 20 20");
-			add_location(svg1, file, 117, 8, 2853);
+			add_location(svg1, file, 119, 8, 2865);
 			attr_dev(circle2, "cx", "10");
 			attr_dev(circle2, "cy", "10");
 			attr_dev(circle2, "r", "9");
 			attr_dev(circle2, "fill", "none");
 			attr_dev(circle2, "stroke-width", "0.5");
 			attr_dev(circle2, "stroke", "currentColor");
-			add_location(circle2, file, 127, 10, 3261);
+			add_location(circle2, file, 129, 10, 3273);
 			attr_dev(path2, "fill", "none");
 			attr_dev(path2, "stroke-width", "1");
 			attr_dev(path2, "stroke", "currentColor");
 			attr_dev(path2, "d", "M5 9 v-3 h3 M5 11 v3 h3 M15 9 v-3 h-3 M15 11 v3 h-3");
-			add_location(path2, file, 128, 10, 3357);
+			add_location(path2, file, 130, 10, 3369);
 			attr_dev(svg2, "width", "20");
 			attr_dev(svg2, "height", "20");
 			attr_dev(svg2, "viewBox", "0 0 20 20");
-			add_location(svg2, file, 126, 8, 3183);
+			add_location(svg2, file, 128, 8, 3195);
 			attr_dev(div1, "class", "buttons absolute right-0 bottom-0 mr-2 mb-2");
-			add_location(div1, file, 107, 6, 2449);
+			add_location(div1, file, 109, 6, 2461);
 			attr_dev(div2, "class", "markmap-wrapper flex-1");
-			add_location(div2, file, 99, 4, 2233);
-			add_location(a, file, 138, 6, 3598);
+			add_location(div2, file, 101, 4, 2245);
+			add_location(a, file, 140, 6, 3610);
 			attr_dev(div3, "class", "p-2");
-			add_location(div3, file, 137, 4, 3574);
+			add_location(div3, file, 139, 4, 3586);
 			attr_dev(div4, "class", "flex-1 min-w-0 flex flex-col");
-			add_location(div4, file, 98, 2, 2186);
+			add_location(div4, file, 100, 2, 2198);
 			attr_dev(div5, "class", "repl");
-			add_location(div5, file, 96, 0, 2084);
+			add_location(div5, file, 98, 0, 2096);
 		},
 		m: function mount(target, anchor, remount) {
 			insert_dev(target, t0, anchor);
 			insert_dev(target, div5, anchor);
 			append_dev(div5, div0);
-			/*div0_binding*/ ctx[9](div0);
+			/*div0_binding*/ ctx[10](div0);
 			append_dev(div5, t1);
 			append_dev(div5, div4);
 			append_dev(div4, div2);
@@ -560,7 +560,7 @@ function create_fragment(ctx) {
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(t0);
 			if (detaching) detach_dev(div5);
-			/*div0_binding*/ ctx[9](null);
+			/*div0_binding*/ ctx[10](null);
 			destroy_component(markmap);
 			run_all(dispose);
 		}
@@ -620,9 +620,15 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	}
 
+	function update() {
+		if (cm) {
+			$$invalidate(2, content = cm.getValue());
+		}
+	}
+
 	onMount(async () => {
-		const { default: CodeMirror } = await import('./codemirror.e2efab28.js');
-		await import('./markdown.29cca22d.js');
+		const { default: CodeMirror } = await import('./codemirror.79b2ad7f.js');
+		await import('./markdown.d97c9292.js');
 
 		cm = CodeMirror(editorEl, {
 			lineNumbers: true,
@@ -658,10 +664,6 @@ function instance($$self, $$props, $$invalidate) {
 		cm.on("change", lodash_debounce(update, 500));
 		update();
 		loadData();
-
-		function update() {
-			$$invalidate(2, content = cm.getValue());
-		}
 	});
 
 	onDestroy(async () => {
@@ -719,7 +721,8 @@ function instance($$self, $$props, $$invalidate) {
 		onZoomOut,
 		download,
 		onDownloadHTML,
-		loadData
+		loadData,
+		update
 	});
 
 	$$self.$inject_state = $$props => {
@@ -746,6 +749,7 @@ function instance($$self, $$props, $$invalidate) {
 		onDownloadHTML,
 		cm,
 		loadData,
+		update,
 		div0_binding,
 		markmap_el_binding,
 		markmap_onReset_binding,
