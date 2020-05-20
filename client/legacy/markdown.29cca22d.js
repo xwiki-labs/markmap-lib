@@ -22,7 +22,7 @@ import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
 import 'core-js/modules/web.url';
-import { y as createCommonjsModule } from './client.54abb29e.js';
+import { y as createCommonjsModule } from './client.fd9e4121.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.async-iterator';
@@ -52,7 +52,7 @@ import 'core-js/modules/es.array.find';
 import 'core-js/modules/es.array.sort';
 import 'core-js/modules/es.regexp.constructor';
 import 'core-js/modules/es.number.constructor';
-import codemirror from './codemirror.b56a4682.js';
+import codemirror from './codemirror.e2efab28.js';
 import 'core-js/modules/es.array.last-index-of';
 
 var xml = createCommonjsModule(function (module, exports) {
@@ -1252,7 +1252,7 @@ var meta = createCommonjsModule(function (module, exports) {
       mode: "textile",
       ext: ["textile"]
     }, {
-      name: "TiddlyWiki ",
+      name: "TiddlyWiki",
       mime: "text/x-tiddlywiki",
       mode: "tiddlywiki"
     }, {
@@ -1472,6 +1472,7 @@ var markdown = createCommonjsModule(function (module, exports) {
       if (modeCfg.strikethrough === undefined) modeCfg.strikethrough = false;
       if (modeCfg.emoji === undefined) modeCfg.emoji = false;
       if (modeCfg.fencedCodeBlockHighlighting === undefined) modeCfg.fencedCodeBlockHighlighting = true;
+      if (modeCfg.fencedCodeBlockDefaultMode === undefined) modeCfg.fencedCodeBlockDefaultMode = '';
       if (modeCfg.xml === undefined) modeCfg.xml = true; // Allow token types to be overridden by user-provided token types.
 
       if (modeCfg.tokenTypeOverrides === undefined) modeCfg.tokenTypeOverrides = {};
@@ -1654,7 +1655,7 @@ var markdown = createCommonjsModule(function (module, exports) {
           state.quote = 0;
           state.fencedEndRE = new RegExp(match[1] + "+ *$"); // try switching mode
 
-          state.localMode = modeCfg.fencedCodeBlockHighlighting && getMode(match[2]);
+          state.localMode = modeCfg.fencedCodeBlockHighlighting && getMode(match[2] || modeCfg.fencedCodeBlockDefaultMode);
           if (state.localMode) state.localState = CodeMirror.startState(state.localMode);
           state.f = state.block = local;
           if (modeCfg.highlightFormatting) state.formatting = "code-block";

@@ -22,7 +22,7 @@ import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
 import 'core-js/modules/web.url';
-import { y as createCommonjsModule, K as commonjsGlobal, _ as _typeof } from './client.54abb29e.js';
+import { y as createCommonjsModule, K as commonjsGlobal, _ as _typeof } from './client.fd9e4121.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.async-iterator';
@@ -347,7 +347,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
     } // Number of pixels added to scroller and sizer to hide scrollbar
 
 
-    var scrollerGap = 30; // Returned or thrown by various protocols to signal 'I'm not
+    var scrollerGap = 50; // Returned or thrown by various protocols to signal 'I'm not
     // handling this'.
 
     var Pass = {
@@ -1905,7 +1905,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
 
           if (output[prop] == null) {
             output[prop] = lineClass[2];
-          } else if (!new RegExp("(?:^|\s)" + lineClass[2] + "(?:$|\s)").test(output[prop])) {
+          } else if (!new RegExp("(?:^|\\s)" + lineClass[2] + "(?:$|\\s)").test(output[prop])) {
             output[prop] += " " + lineClass[2];
           }
         }
@@ -6189,7 +6189,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
 
       snapshot.activeElt.focus();
 
-      if (snapshot.anchorNode && contains(document.body, snapshot.anchorNode) && contains(document.body, snapshot.focusNode)) {
+      if (!/^(INPUT|TEXTAREA)$/.test(snapshot.activeElt.nodeName) && snapshot.anchorNode && contains(document.body, snapshot.anchorNode) && contains(document.body, snapshot.focusNode)) {
         var sel = window.getSelection(),
             range = document.createRange();
         range.setEnd(snapshot.anchorNode, snapshot.anchorOffset);
@@ -10889,6 +10889,11 @@ var codemirror = createCommonjsModule(function (module, exports) {
 
     function onKeyDown(e) {
       var cm = this;
+
+      if (e.target && e.target != cm.display.input.getField()) {
+        return;
+      }
+
       cm.curOp.focus = activeElt();
 
       if (signalDOMEvent(cm, e)) {
@@ -10948,6 +10953,10 @@ var codemirror = createCommonjsModule(function (module, exports) {
 
     function onKeyPress(e) {
       var cm = this;
+
+      if (e.target && e.target != cm.display.input.getField()) {
+        return;
+      }
 
       if (eventInWidget(cm.display, e) || signalDOMEvent(cm, e) || e.ctrlKey && !e.altKey || mac && e.metaKey) {
         return;
@@ -11180,9 +11189,11 @@ var codemirror = createCommonjsModule(function (module, exports) {
           } // Work around unexplainable focus problem in IE9 (#2127) and Chrome (#3081)
 
 
-          if (webkit || ie && ie_version == 9) {
+          if (webkit && !safari || ie && ie_version == 9) {
             setTimeout(function () {
-              display.wrapper.ownerDocument.body.focus();
+              display.wrapper.ownerDocument.body.focus({
+                preventScroll: true
+              });
               display.input.focus();
             }, 20);
           } else {
@@ -13188,8 +13199,23 @@ var codemirror = createCommonjsModule(function (module, exports) {
           cm = input.cm;
       var div = input.div = display.lineDiv;
       disableBrowserMagic(div, cm.options.spellcheck, cm.options.autocorrect, cm.options.autocapitalize);
+
+      function belongsToInput(e) {
+        for (var t = e.target; t; t = t.parentNode) {
+          if (t == div) {
+            return true;
+          }
+
+          if (/\bCodeMirror-(?:line)?widget\b/.test(t.className)) {
+            break;
+          }
+        }
+
+        return false;
+      }
+
       on(div, "paste", function (e) {
-        if (signalDOMEvent(cm, e) || handlePaste(e, cm)) {
+        if (!belongsToInput(e) || signalDOMEvent(cm, e) || handlePaste(e, cm)) {
           return;
         } // IE doesn't fire input events, so we schedule a read for the pasted content in this way
 
@@ -13233,7 +13259,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
       });
 
       function onCopyCut(e) {
-        if (signalDOMEvent(cm, e)) {
+        if (!belongsToInput(e) || signalDOMEvent(cm, e)) {
           return;
         }
 
@@ -14634,7 +14660,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
 
     CodeMirror.fromTextArea = fromTextArea;
     addLegacyProps(CodeMirror);
-    CodeMirror.version = "5.53.2";
+    CodeMirror.version = "5.54.0";
     return CodeMirror;
   });
 });

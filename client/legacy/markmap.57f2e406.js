@@ -18,7 +18,7 @@ import 'core-js/modules/es.string.split';
 import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
-import { y as createCommonjsModule, z as unwrapExports, _ as _typeof, A as _inherits, B as _createSuper, C as _classCallCheck, D as _createClass, E as _assertThisInitialized, F as _slicedToArray, G as _asyncToGenerator, H as _createForOfIteratorHelper, I as _toConsumableArray, J as getCjsExportFromNamespace, K as commonjsGlobal, L as _defineProperty, S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, M as globals, N as onMount, O as onDestroy, v as validate_slots, P as svg_element, g as claim_element, h as children, b as detach_dev, m as attr_dev, l as add_location, n as insert_dev, r as noop$4, Q as binding_callbacks } from './client.54abb29e.js';
+import { y as createCommonjsModule, z as unwrapExports, _ as _typeof, A as _inherits, B as _createSuper, C as _classCallCheck, D as _createClass, E as _assertThisInitialized, F as _slicedToArray, G as _toConsumableArray, H as _asyncToGenerator, I as _createForOfIteratorHelper, J as getCjsExportFromNamespace, K as commonjsGlobal, L as _defineProperty, S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, M as globals, N as onMount, O as onDestroy, v as validate_slots, P as svg_element, g as claim_element, h as children, b as detach_dev, m as attr_dev, l as add_location, n as insert_dev, r as noop$4, Q as binding_callbacks } from './client.fd9e4121.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.iterator';
@@ -80,9 +80,9 @@ import 'core-js/modules/es.math.expm1';
 import 'core-js/modules/es.math.log1p';
 import 'core-js/modules/es.date.to-iso-string';
 import 'core-js/modules/es.object.freeze';
-import 'core-js/modules/es.object.entries';
 import 'core-js/modules/es.array.flat-map';
 import 'core-js/modules/es.array.unscopables.flat-map';
+import 'core-js/modules/es.object.entries';
 import 'core-js/modules/es.array.includes';
 import 'core-js/modules/es.string.ends-with';
 
@@ -19671,6 +19671,102 @@ var d3Flextree = /*#__PURE__*/Object.freeze({
   flextree: flextree
 });
 
+var base = createCommonjsModule(function (module, exports) {
+
+  exports.__esModule = true;
+  exports.getId = getId;
+  exports.walkTree = walkTree;
+  exports.arrayFrom = arrayFrom;
+  exports.flatMap = flatMap;
+  exports.addClass = addClass;
+  exports.childSelector = childSelector;
+  var uniqId = Math.random().toString(36).slice(2, 8);
+  var globalIndex = 0;
+
+  function getId() {
+    globalIndex += 1;
+    return "mm-".concat(uniqId, "-").concat(globalIndex);
+  }
+
+  function walkTree(tree, callback) {
+    var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'c';
+
+    var walk = function walk(item, parent) {
+      return callback(item, function () {
+        var _item$key;
+
+        (_item$key = item[key]) == null ? void 0 : _item$key.forEach(function (child) {
+          walk(child, item);
+        });
+      }, parent);
+    };
+
+    walk(tree);
+  }
+
+  function arrayFrom(arrayLike) {
+    if (Array.from) return Array.from(arrayLike);
+    var array = [];
+
+    for (var i = 0; i < arrayLike.length; i += 1) {
+      array.push(arrayLike[i]);
+    }
+
+    return array;
+  }
+
+  function flatMap(arrayLike, callback) {
+    if (arrayLike.flatMap) return arrayLike.flatMap(callback);
+    var array = [];
+
+    for (var i = 0; i < arrayLike.length; i += 1) {
+      var result = callback(arrayLike[i], i, arrayLike);
+      if (Array.isArray(result)) array.push.apply(array, _toConsumableArray(result));else array.push(result);
+    }
+
+    return array;
+  }
+
+  function addClass(className) {
+    var classList = (className || '').split(' ').filter(Boolean);
+
+    for (var _len = arguments.length, rest = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      rest[_key - 1] = arguments[_key];
+    }
+
+    rest.forEach(function (item) {
+      if (item && classList.indexOf(item) < 0) classList.push(item);
+    });
+    return classList.join(' ');
+  }
+
+  function childSelector(filter) {
+    if (typeof filter === 'string') {
+      var tagName = filter;
+
+      filter = function filter(el) {
+        return el.tagName === tagName;
+      };
+    }
+
+    var filterFn = filter;
+    return function selector() {
+      var nodes = arrayFrom(this.childNodes);
+      if (filterFn) nodes = nodes.filter(function (node) {
+        return filterFn(node);
+      });
+      return nodes;
+    };
+  }
+});
+unwrapExports(base);
+var base_1 = base.getId;
+var base_2 = base.walkTree;
+var base_3 = base.arrayFrom;
+var base_4 = base.flatMap;
+var base_5 = base.addClass;
+var base_6 = base.childSelector;
+
 var html$1 = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
@@ -19917,12 +20013,14 @@ var loader = createCommonjsModule(function (module, exports) {
     }
   }
 
-  function initializePlugins(_x3, _x4) {
+  function initializePlugins(_x3, _x4, _x5) {
     return _initializePlugins.apply(this, arguments);
   }
 
   function _initializePlugins() {
-    _initializePlugins = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(plugins, options) {
+    _initializePlugins = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(Markmap, plugins, options) {
+      var _iterator3, _step3, initialize;
+
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -19935,12 +20033,20 @@ var loader = createCommonjsModule(function (module, exports) {
               }));
 
             case 3:
-              return _context2.abrupt("return", plugins.map(function (_ref6) {
-                var transform = _ref6.transform;
-                return transform;
-              }));
+              _iterator3 = _createForOfIteratorHelper(plugins);
 
-            case 4:
+              try {
+                for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                  initialize = _step3.value.initialize;
+                  if (initialize) initialize(Markmap, options);
+                }
+              } catch (err) {
+                _iterator3.e(err);
+              } finally {
+                _iterator3.f();
+              }
+
+            case 5:
             case "end":
               return _context2.stop();
           }
@@ -19978,20 +20084,20 @@ var loader = createCommonjsModule(function (module, exports) {
   }
 
   function persistPlugins(plugins, context) {
-    var js = plugins.flatMap(function (plugin) {
+    var js = (0, base.flatMap)(plugins, function (plugin) {
       return persistJS(plugin.scripts, context);
     }).join('');
-    var css = plugins.flatMap(function (plugin) {
+    var css = (0, base.flatMap)(plugins, function (plugin) {
       return persistCSS(plugin.styles);
     }).join('');
-    var processors = plugins.map(function (_ref5) {
-      var transform = _ref5.transform;
-      return transform;
-    });
+    var initializers = plugins.map(function (_ref5) {
+      var initialize = _ref5.initialize;
+      return initialize;
+    }).filter(Boolean);
     return {
       js: js,
       css: css,
-      processors: processors
+      initializers: initializers
     };
   }
 });
@@ -20008,108 +20114,26 @@ var loader_8 = loader.persistPlugins;
 var util = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
-  var _exportNames = {
-    getId: true,
-    walkTree: true,
-    arrayFrom: true,
-    addClass: true,
-    childSelector: true
-  };
-  exports.getId = getId;
-  exports.walkTree = walkTree;
-  exports.arrayFrom = arrayFrom;
-  exports.addClass = addClass;
-  exports.childSelector = childSelector;
+  Object.keys(base).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
+    exports[key] = base[key];
+  });
   Object.keys(html$1).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
-    if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
     exports[key] = html$1[key];
   });
   Object.keys(loader).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
-    if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
     exports[key] = loader[key];
   });
-  var uniqId = Math.random().toString(36).slice(2, 8);
-  var globalIndex = 0;
-
-  function getId() {
-    globalIndex += 1;
-    return "mm-".concat(uniqId, "-").concat(globalIndex);
-  }
-
-  function walkTree(tree, callback) {
-    var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'c';
-
-    var walk = function walk(item, parent) {
-      return callback(item, function () {
-        var _item$key;
-
-        (_item$key = item[key]) == null ? void 0 : _item$key.forEach(function (child) {
-          walk(child, item);
-        });
-      }, parent);
-    };
-
-    walk(tree);
-  }
-
-  function arrayFrom(arrayLike) {
-    var array = [];
-
-    for (var i = 0; i < arrayLike.length; i += 1) {
-      array.push(arrayLike[i]);
-    }
-
-    return array;
-  }
-
-  function addClass(className) {
-    var classList = (className || '').split(' ').filter(Boolean);
-
-    for (var _len = arguments.length, rest = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      rest[_key - 1] = arguments[_key];
-    }
-
-    rest.forEach(function (item) {
-      if (item && classList.indexOf(item) < 0) classList.push(item);
-    });
-    return classList.join(' ');
-  }
-
-  function childSelector(filter) {
-    if (typeof filter === 'string') {
-      var tagName = filter;
-
-      filter = function filter(el) {
-        return el.tagName === tagName;
-      };
-    }
-
-    var filterFn = filter;
-    return function selector() {
-      var nodes = arrayFrom(this.childNodes);
-      if (filterFn) nodes = nodes.filter(function (node) {
-        return filterFn(node);
-      });
-      return nodes;
-    };
-  }
 });
 unwrapExports(util);
-var util_1 = util.getId;
-var util_2 = util.walkTree;
-var util_3 = util.arrayFrom;
-var util_4 = util.addClass;
-var util_5 = util.childSelector;
 
 var mathjax = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
-  exports.transform = transform;
-  exports.scripts = exports.styles = void 0;
+  exports.plugin = void 0;
   var styles = [];
-  exports.styles = styles;
   var scripts = [{
     type: 'iife',
     data: {
@@ -20134,31 +20158,35 @@ var mathjax = createCommonjsModule(function (module, exports) {
       src: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
     }
   }];
-  exports.scripts = scripts;
 
-  function transform(nodes, mm) {
-    var _MathJax$typeset, _MathJax;
+  function initialize(Markmap, options) {
+    Markmap.transformHtml.tap(function (mm, nodes) {
+      var _MathJax$typeset, _MathJax;
 
-    (_MathJax$typeset = (_MathJax = window.MathJax).typeset) == null ? void 0 : _MathJax$typeset.call(_MathJax, nodes);
+      (_MathJax$typeset = (_MathJax = window.MathJax).typeset) == null ? void 0 : _MathJax$typeset.call(_MathJax, nodes);
+    });
   }
+
+  var plugin = {
+    styles: styles,
+    scripts: scripts,
+    initialize: initialize
+  };
+  exports.plugin = plugin;
 });
 unwrapExports(mathjax);
-var mathjax_1 = mathjax.transform;
-var mathjax_2 = mathjax.scripts;
-var mathjax_3 = mathjax.styles;
+var mathjax_1 = mathjax.plugin;
 
 var prism = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
-  exports.transform = transform;
-  exports.scripts = exports.styles = void 0;
+  exports.plugin = void 0;
   var styles = [{
     type: 'stylesheet',
     data: {
       href: 'https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css'
     }
   }];
-  exports.styles = styles;
   var scripts = [{
     type: 'iife',
     data: {
@@ -20180,52 +20208,96 @@ var prism = createCommonjsModule(function (module, exports) {
       src: 'https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js'
     }
   }];
-  exports.scripts = scripts;
 
-  function transform(nodes, mm) {
-    var _window = window,
-        Prism = _window.Prism;
-    var langs = nodes.flatMap(function (node) {
-      return Array.from(node.querySelectorAll('code[class*=language-]'));
-    }).map(function (code) {
-      var lang = code.className.match(/(?:^|\s)language-(\S+)|$/)[1];
+  function initialize(Markmap, options) {
+    Markmap.transformHtml.tap(function (mm, nodes) {
+      var _window = window,
+          Prism = _window.Prism;
+      var langs = (0, util.flatMap)(nodes, function (node) {
+        return (0, util.arrayFrom)(node.querySelectorAll('code[class*=language-]'));
+      }).map(function (code) {
+        var lang = code.className.match(/(?:^|\s)language-(\S+)|$/)[1];
 
-      if (Prism.languages[lang]) {
-        Prism.highlightElement(code);
-      } else {
-        return lang;
+        if (Prism.languages[lang]) {
+          Prism.highlightElement(code);
+        } else {
+          return lang;
+        }
+      }).filter(Boolean);
+
+      if (langs.length) {
+        Prism.plugins.autoloader.loadLanguages(langs, function () {
+          mm.setData();
+          mm.fit();
+        });
       }
-    }).filter(Boolean);
-
-    if (langs.length) {
-      Prism.plugins.autoloader.loadLanguages(langs, function () {
-        mm.setData();
-        mm.fit();
-      });
-    }
+    });
   }
+
+  var plugin = {
+    styles: styles,
+    scripts: scripts,
+    initialize: initialize
+  };
+  exports.plugin = plugin;
 });
 unwrapExports(prism);
-var prism_1 = prism.transform;
-var prism_2 = prism.scripts;
-var prism_3 = prism.styles;
+var prism_1 = prism.plugin;
 
 var plugins = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
   exports.prism = exports.mathJax = void 0;
-
-  var _mathJax = interopRequireWildcard(mathjax);
-
-  exports.mathJax = _mathJax;
-
-  var _prism = interopRequireWildcard(prism);
-
-  exports.prism = _prism;
+  exports.mathJax = mathjax.plugin;
+  exports.prism = prism.plugin;
 });
 unwrapExports(plugins);
 var plugins_1 = plugins.prism;
 var plugins_2 = plugins.mathJax;
+
+var hook = createCommonjsModule(function (module, exports) {
+
+  exports.__esModule = true;
+  exports.Hook = void 0;
+
+  var Hook = /*#__PURE__*/function () {
+    function Hook() {
+      _classCallCheck(this, Hook);
+
+      this.listeners = [];
+    }
+
+    _createClass(Hook, [{
+      key: "tap",
+      value: function tap(fn) {
+        this.listeners.push(fn);
+      }
+    }, {
+      key: "call",
+      value: function call() {
+        var _iterator = _createForOfIteratorHelper(this.listeners),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var fn = _step.value;
+            fn.apply(void 0, arguments);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+    }]);
+
+    return Hook;
+  }();
+
+  exports.Hook = Hook;
+});
+unwrapExports(hook);
+var hook_1 = hook.Hook;
 
 var require$$0 = getCjsExportFromNamespace(d3);
 
@@ -20335,10 +20407,6 @@ var view = createCommonjsModule(function (module, exports) {
     }, {
       key: "initializeData",
       value: function initializeData(node) {
-        var _this2 = this;
-
-        var _Markmap$processors;
-
         var i = 0;
         var _this$options2 = this.options,
             nodeFont = _this$options2.nodeFont,
@@ -20370,14 +20438,8 @@ var view = createCommonjsModule(function (module, exports) {
 
           next();
         });
-
-        if ((_Markmap$processors = Markmap.processors) == null ? void 0 : _Markmap$processors.length) {
-          var nodes = (0, util.arrayFrom)(container.childNodes);
-          Markmap.processors.forEach(function (processor) {
-            processor(nodes, _this2);
-          });
-        }
-
+        var nodes = (0, util.arrayFrom)(container.childNodes);
+        this.constructor.transformHtml.call(this, nodes);
         (0, util.walkTree)(node, function (item, next, parent) {
           var _parent$p;
 
@@ -20409,7 +20471,7 @@ var view = createCommonjsModule(function (module, exports) {
     }, {
       key: "renderData",
       value: function renderData(originData) {
-        var _this3 = this;
+        var _this2 = this;
 
         var _origin$data$p$x, _origin$data$p$y;
 
@@ -20560,7 +20622,7 @@ var view = createCommonjsModule(function (module, exports) {
           return update;
         }, function (exit) {
           var source = [origin.y + origin.ySizeInner, origin.x + origin.xSize / 2];
-          return _this3.transition(exit).attr('d', linkShape({
+          return _this2.transition(exit).attr('d', linkShape({
             source: source,
             target: source
           })).remove();
@@ -20642,7 +20704,7 @@ var view = createCommonjsModule(function (module, exports) {
   }();
 
   exports.Markmap = Markmap;
-  Markmap.processors = [];
+  Markmap.transformHtml = new hook.Hook();
 
   function markmap(svg, data, opts) {
     return Markmap.create(svg, opts, data);
@@ -20670,18 +20732,9 @@ var view = createCommonjsModule(function (module, exports) {
 
                 return item;
               }).filter(Boolean);
-              _context.t0 = [];
-              _context.t1 = _toConsumableArray(Markmap.processors);
-              _context.t2 = _toConsumableArray;
-              _context.next = 6;
-              return (0, util.initializePlugins)(items, options);
+              return _context.abrupt("return", (0, util.initializePlugins)(Markmap, items, options));
 
-            case 6:
-              _context.t3 = _context.sent;
-              _context.t4 = (0, _context.t2)(_context.t3);
-              Markmap.processors = _context.t0.concat.call(_context.t0, _context.t1, _context.t4);
-
-            case 9:
+            case 2:
             case "end":
               return _context.stop();
           }
@@ -27280,7 +27333,7 @@ unwrapExports(transform_1);
 var transform_2 = transform_1.buildTree;
 var transform_3 = transform_1.transform;
 
-/* src/components/markmap.svelte generated by Svelte v3.22.2 */
+/* src/components/markmap.svelte generated by Svelte v3.22.3 */
 
 const { console: console_1 } = globals;
 const file = "src/components/markmap.svelte";

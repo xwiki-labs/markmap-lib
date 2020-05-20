@@ -22,7 +22,7 @@ import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
 import 'core-js/modules/web.url';
-import { y as createCommonjsModule, I as _toConsumableArray, z as unwrapExports, S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, N as onMount, O as onDestroy, v as validate_slots, Q as binding_callbacks, X as bind, a as space, e as element, c as create_component, P as svg_element, t as text, q as query_selector_all, b as detach_dev, f as claim_space, g as claim_element, h as children, k as claim_component, j as claim_text, m as attr_dev, l as add_location, n as insert_dev, o as append_dev, p as mount_component, V as run_all, T as listen_dev, Y as is_function, W as prevent_default, Z as add_flush_callback, u as transition_in, w as transition_out, x as destroy_component, M as globals } from './client.54abb29e.js';
+import { y as createCommonjsModule, G as _toConsumableArray, z as unwrapExports, S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, N as onMount, O as onDestroy, v as validate_slots, Q as binding_callbacks, X as bind, a as space, e as element, c as create_component, P as svg_element, t as text, q as query_selector_all, b as detach_dev, f as claim_space, g as claim_element, h as children, k as claim_component, j as claim_text, m as attr_dev, l as add_location, n as insert_dev, o as append_dev, p as mount_component, V as run_all, T as listen_dev, Y as is_function, W as prevent_default, Z as add_flush_callback, u as transition_in, w as transition_out, x as destroy_component, M as globals } from './client.fd9e4121.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.async-iterator';
@@ -53,7 +53,7 @@ import 'core-js/modules/es.function.bind';
 import 'core-js/modules/es.object.define-property';
 import 'core-js/modules/es.object.get-own-property-descriptor';
 import 'core-js/modules/es.weak-map';
-import { u as util, p as plugins, M as Markmap_1, a as lodash_debounce, t as transform_3 } from './markmap.f457c444.js';
+import { u as util, p as plugins, M as Markmap_1, a as lodash_debounce, t as transform_3 } from './markmap.57f2e406.js';
 import 'core-js/modules/es.array.sort';
 import 'core-js/modules/es.string.trim';
 import 'core-js/modules/es.regexp.constructor';
@@ -96,9 +96,9 @@ import 'core-js/modules/es.math.expm1';
 import 'core-js/modules/es.math.log1p';
 import 'core-js/modules/es.date.to-iso-string';
 import 'core-js/modules/es.object.freeze';
-import 'core-js/modules/es.object.entries';
 import 'core-js/modules/es.array.flat-map';
 import 'core-js/modules/es.array.unscopables.flat-map';
+import 'core-js/modules/es.object.entries';
 import 'core-js/modules/es.array.includes';
 import 'core-js/modules/es.string.ends-with';
 
@@ -107,7 +107,7 @@ var template_1 = createCommonjsModule(function (module, exports) {
   exports.__esModule = true;
   exports.fillTemplate = fillTemplate;
   var template = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n<title>Markmap</title>\n<style>\n* {\n  margin: 0;\n  padding: 0;\n}\n#mindmap {\n  display: block;\n  width: 100vw;\n  height: 100vh;\n}\n</style>\n<!--CSS-->\n</head>\n<body>\n<svg id=\"mindmap\"></svg>\n<!--JS-->\n</body>\n</html>\n";
-  var baseJs = ['https://cdn.jsdelivr.net/npm/d3@5', 'https://cdn.jsdelivr.net/npm/markmap-lib@0.7.7/dist/browser/view.min.js'].map(function (src) {
+  var baseJs = ['https://cdn.jsdelivr.net/npm/d3@5', 'https://cdn.jsdelivr.net/npm/markmap-lib@0.7.8/dist/browser/view.min.js'].map(function (src) {
     return {
       type: 'script',
       data: {
@@ -120,7 +120,7 @@ var template_1 = createCommonjsModule(function (module, exports) {
     var _ref = (0, util.persistPlugins)([(opts == null ? void 0 : opts.mathJax) && plugins.mathJax, (opts == null ? void 0 : opts.prism) && plugins.prism].filter(Boolean), opts),
         js = _ref.js,
         css = _ref.css,
-        processors = _ref.processors;
+        initializers = _ref.initializers;
 
     var jsList = [].concat(_toConsumableArray((0, util.persistJS)(baseJs)), [js], _toConsumableArray((0, util.persistJS)([{
       type: 'iife',
@@ -128,22 +128,24 @@ var template_1 = createCommonjsModule(function (module, exports) {
         fn: function fn(data) {
           var Markmap = window.markmap.Markmap;
 
-          for (var _len = arguments.length, processors = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            processors[_key - 1] = arguments[_key];
+          for (var _len = arguments.length, initializers = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            initializers[_key - 1] = arguments[_key];
           }
 
-          Markmap.processors = processors;
+          initializers.forEach(function (initialize) {
+            return initialize(Markmap);
+          });
           Markmap.create('svg#mindmap', null, data);
         },
         getParams: function getParams(_ref2) {
           var data = _ref2.data,
-              processors = _ref2.processors;
-          return [data].concat(_toConsumableArray(processors));
+              initializers = _ref2.initializers;
+          return [data].concat(_toConsumableArray(initializers));
         }
       }
     }], {
       data: data,
-      processors: processors
+      initializers: initializers
     })));
     var html = template.replace('<!--CSS-->', css).replace('<!--JS-->', jsList.join(''));
     return html;
@@ -152,7 +154,7 @@ var template_1 = createCommonjsModule(function (module, exports) {
 unwrapExports(template_1);
 var template_2 = template_1.fillTemplate;
 
-/* src/routes/repl.svelte generated by Svelte v3.22.2 */
+/* src/routes/repl.svelte generated by Svelte v3.22.3 */
 
 const { document: document_1 } = globals;
 const file = "src/routes/repl.svelte";
@@ -189,19 +191,19 @@ function create_fragment(ctx) {
 	let dispose;
 
 	function markmap_el_binding(value) {
-		/*markmap_el_binding*/ ctx[9].call(null, value);
+		/*markmap_el_binding*/ ctx[10].call(null, value);
 	}
 
 	function markmap_onReset_binding(value) {
-		/*markmap_onReset_binding*/ ctx[10].call(null, value);
+		/*markmap_onReset_binding*/ ctx[11].call(null, value);
 	}
 
 	function markmap_onZoomIn_binding(value) {
-		/*markmap_onZoomIn_binding*/ ctx[11].call(null, value);
+		/*markmap_onZoomIn_binding*/ ctx[12].call(null, value);
 	}
 
 	function markmap_onZoomOut_binding(value) {
-		/*markmap_onZoomOut_binding*/ ctx[12].call(null, value);
+		/*markmap_onZoomOut_binding*/ ctx[13].call(null, value);
 	}
 
 	let markmap_props = { content: /*content*/ ctx[2] };
@@ -391,72 +393,72 @@ function create_fragment(ctx) {
 		h: function hydrate() {
 			document_1.title = "Try Markmap";
 			attr_dev(div0, "class", "flex-1 min-w-0 border border-gray-300");
-			add_location(div0, file, 82, 2, 1762);
+			add_location(div0, file, 97, 2, 2105);
 			attr_dev(circle0, "cx", "10");
 			attr_dev(circle0, "cy", "10");
 			attr_dev(circle0, "r", "9");
 			attr_dev(circle0, "fill", "none");
 			attr_dev(circle0, "stroke-width", "0.5");
 			attr_dev(circle0, "stroke", "currentColor");
-			add_location(circle0, file, 94, 10, 2251);
+			add_location(circle0, file, 109, 10, 2594);
 			attr_dev(path0, "fill", "none");
 			attr_dev(path0, "stroke-width", "1");
 			attr_dev(path0, "stroke", "currentColor");
 			attr_dev(path0, "d", "M10 6 v8 M6 10 h8");
-			add_location(path0, file, 95, 10, 2347);
+			add_location(path0, file, 110, 10, 2690);
 			attr_dev(svg0, "width", "20");
 			attr_dev(svg0, "height", "20");
 			attr_dev(svg0, "viewBox", "0 0 20 20");
-			add_location(svg0, file, 93, 8, 2172);
+			add_location(svg0, file, 108, 8, 2515);
 			attr_dev(circle1, "cx", "10");
 			attr_dev(circle1, "cy", "10");
 			attr_dev(circle1, "r", "9");
 			attr_dev(circle1, "fill", "none");
 			attr_dev(circle1, "stroke-width", "0.5");
 			attr_dev(circle1, "stroke", "currentColor");
-			add_location(circle1, file, 103, 10, 2590);
+			add_location(circle1, file, 118, 10, 2933);
 			attr_dev(path1, "fill", "none");
 			attr_dev(path1, "stroke-width", "1");
 			attr_dev(path1, "stroke", "currentColor");
 			attr_dev(path1, "d", "M6 10 h8");
-			add_location(path1, file, 104, 10, 2686);
+			add_location(path1, file, 119, 10, 3029);
 			attr_dev(svg1, "width", "20");
 			attr_dev(svg1, "height", "20");
 			attr_dev(svg1, "viewBox", "0 0 20 20");
-			add_location(svg1, file, 102, 8, 2510);
+			add_location(svg1, file, 117, 8, 2853);
 			attr_dev(circle2, "cx", "10");
 			attr_dev(circle2, "cy", "10");
 			attr_dev(circle2, "r", "9");
 			attr_dev(circle2, "fill", "none");
 			attr_dev(circle2, "stroke-width", "0.5");
 			attr_dev(circle2, "stroke", "currentColor");
-			add_location(circle2, file, 112, 10, 2918);
+			add_location(circle2, file, 127, 10, 3261);
 			attr_dev(path2, "fill", "none");
 			attr_dev(path2, "stroke-width", "1");
 			attr_dev(path2, "stroke", "currentColor");
 			attr_dev(path2, "d", "M5 9 v-3 h3 M5 11 v3 h3 M15 9 v-3 h-3 M15 11 v3 h-3");
-			add_location(path2, file, 113, 10, 3014);
+			add_location(path2, file, 128, 10, 3357);
 			attr_dev(svg2, "width", "20");
 			attr_dev(svg2, "height", "20");
 			attr_dev(svg2, "viewBox", "0 0 20 20");
-			add_location(svg2, file, 111, 8, 2840);
+			add_location(svg2, file, 126, 8, 3183);
 			attr_dev(div1, "class", "buttons absolute right-0 bottom-0 mr-2 mb-2");
-			add_location(div1, file, 92, 6, 2106);
+			add_location(div1, file, 107, 6, 2449);
 			attr_dev(div2, "class", "markmap-wrapper flex-1");
-			add_location(div2, file, 84, 4, 1890);
-			add_location(a, file, 123, 6, 3255);
+			add_location(div2, file, 99, 4, 2233);
+			add_location(a, file, 138, 6, 3598);
 			attr_dev(div3, "class", "p-2");
-			add_location(div3, file, 122, 4, 3231);
+			add_location(div3, file, 137, 4, 3574);
 			attr_dev(div4, "class", "flex-1 min-w-0 flex flex-col");
-			add_location(div4, file, 83, 2, 1843);
+			add_location(div4, file, 98, 2, 2186);
 			attr_dev(div5, "class", "repl");
-			add_location(div5, file, 81, 0, 1741);
+			add_location(div5, file, 96, 0, 2084);
 		},
 		m: function mount(target, anchor, remount) {
 			insert_dev(target, t0, anchor);
 			insert_dev(target, div5, anchor);
 			append_dev(div5, div0);
-			/*div0_binding*/ ctx[8](div0);
+			/*div0_binding*/ ctx[9](div0);
 			append_dev(div5, t1);
 			append_dev(div5, div4);
 			append_dev(div4, div2);
@@ -558,7 +560,7 @@ function create_fragment(ctx) {
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(t0);
 			if (detaching) detach_dev(div5);
-			/*div0_binding*/ ctx[8](null);
+			/*div0_binding*/ ctx[9](null);
 			destroy_component(markmap);
 			run_all(dispose);
 		}
@@ -602,9 +604,25 @@ function instance($$self, $$props, $$invalidate) {
 		download("markmap.html", "data:text/html;utf8," + encodeURIComponent(html));
 	}
 
+	async function loadData() {
+		const hq = new URLSearchParams(window.location.hash.slice(1));
+		const k = hq.get("k");
+
+		if (k) {
+			window.location.hash = "";
+			const res = await fetch(`https://hs.gerald.win/mm/${k}`);
+			const { data } = await res.json();
+
+			if (cm) {
+				cm.setValue(data);
+				update();
+			}
+		}
+	}
+
 	onMount(async () => {
-		const { default: CodeMirror } = await import('./codemirror.b56a4682.js');
-		await import('./markdown.3a22214b.js');
+		const { default: CodeMirror } = await import('./codemirror.e2efab28.js');
+		await import('./markdown.29cca22d.js');
 
 		cm = CodeMirror(editorEl, {
 			lineNumbers: true,
@@ -639,6 +657,7 @@ function instance($$self, $$props, $$invalidate) {
 
 		cm.on("change", lodash_debounce(update, 500));
 		update();
+		loadData();
 
 		function update() {
 			$$invalidate(2, content = cm.getValue());
@@ -699,7 +718,8 @@ function instance($$self, $$props, $$invalidate) {
 		onZoomIn,
 		onZoomOut,
 		download,
-		onDownloadHTML
+		onDownloadHTML,
+		loadData
 	});
 
 	$$self.$inject_state = $$props => {
@@ -725,6 +745,7 @@ function instance($$self, $$props, $$invalidate) {
 		onZoomOut,
 		onDownloadHTML,
 		cm,
+		loadData,
 		div0_binding,
 		markmap_el_binding,
 		markmap_onReset_binding,
