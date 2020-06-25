@@ -480,10 +480,6 @@ textarea {
   resize: vertical;
 }
 
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-  color: #a0aec0;
-}
-
 input::-moz-placeholder, textarea::-moz-placeholder {
   color: #a0aec0;
 }
@@ -643,8 +639,8 @@ a {
 
 a:hover {
     --text-opacity: 1;
-    color: #2b6cb0;
-    color: rgba(43, 108, 176, var(--text-opacity));
+    color: #63b3ed;
+    color: rgba(99, 179, 237, var(--text-opacity));
   }
 
 nav {
@@ -793,6 +789,19 @@ img,
 svg {
   display: inline;
 }
+
+.markdown > code,
+  .markdown :not(pre) > code {
+    --bg-opacity: 1;
+    background-color: #edf2f7;
+    background-color: rgba(237, 242, 247, var(--bg-opacity));
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 0.25rem;
+    --text-opacity: 1;
+    color: #4a5568;
+    color: rgba(74, 85, 104, var(--text-opacity));
+  }
 
 .markdown pre {
     --bg-opacity: 1;
@@ -950,6 +959,10 @@ svg {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .inline {
   display: inline;
 }
@@ -1010,8 +1023,14 @@ svg {
   overflow-x: auto;
 }
 
-.p-2 {
-  padding: 0.5rem;
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .static {
@@ -1036,6 +1055,12 @@ svg {
 
 .text-center {
   text-align: center;
+}
+
+.text-red-500 {
+  --text-opacity: 1;
+  color: #f56565;
+  color: rgba(245, 101, 101, var(--text-opacity));
 }
 
 .transform {

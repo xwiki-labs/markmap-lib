@@ -18,7 +18,7 @@ import 'core-js/modules/es.string.split';
 import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
-import { y as createCommonjsModule, z as unwrapExports, _ as _typeof, A as _inherits, B as _createSuper, C as _classCallCheck, D as _createClass, E as _assertThisInitialized, F as _slicedToArray, G as _toConsumableArray, H as _asyncToGenerator, I as _createForOfIteratorHelper, J as getCjsExportFromNamespace, K as commonjsGlobal, L as _defineProperty, S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, M as globals, N as onMount, O as onDestroy, v as validate_slots, P as svg_element, g as claim_element, h as children, b as detach_dev, m as attr_dev, l as add_location, n as insert_dev, r as noop$4, Q as binding_callbacks } from './client.1f6480ea.js';
+import { y as createCommonjsModule, z as unwrapExports, _ as _typeof, A as _inherits, B as _createSuper, C as _classCallCheck, D as _createClass, E as _assertThisInitialized, F as _slicedToArray, G as _toConsumableArray, H as _asyncToGenerator, I as _createForOfIteratorHelper, J as getCjsExportFromNamespace, K as commonjsGlobal, L as _defineProperty, S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, M as globals, N as onMount, O as onDestroy, v as validate_slots, P as svg_element, g as claim_element, h as children, b as detach_dev, m as attr_dev, l as add_location, n as insert_dev, r as noop$4, Q as binding_callbacks } from './client.4c748dbb.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.iterator';
@@ -6500,6 +6500,7 @@ function image (input, init) {
 
 function responseJson(response) {
   if (!response.ok) throw new Error(response.status + " " + response.statusText);
+  if (response.status === 204 || response.status === 205) return;
   return response.json();
 }
 
@@ -8679,8 +8680,8 @@ function clipBuffer () {
   var lines = [],
       line;
   return {
-    point: function point(x, y) {
-      line.push([x, y]);
+    point: function point(x, y, m) {
+      line.push([x, y, m]);
     },
     lineStart: function lineStart() {
       lines.push(line = []);
@@ -8727,19 +8728,22 @@ function clipRejoin (segments, compareIntersection, startInside, interpolate, st
     var n,
         p0 = segment[0],
         p1 = segment[n],
-        x; // If the first and last points of a segment are coincident, then treat as a
-    // closed ring. TODO if all rings are closed, then the winding order of the
-    // exterior ring should be checked.
+        x;
 
     if (pointEqual(p0, p1)) {
-      stream.lineStart();
+      if (!p0[2] && !p1[2]) {
+        stream.lineStart();
 
-      for (i = 0; i < n; ++i) {
-        stream.point((p0 = segment[i])[0], p0[1]);
-      }
+        for (i = 0; i < n; ++i) {
+          stream.point((p0 = segment[i])[0], p0[1]);
+        }
 
-      stream.lineEnd();
-      return;
+        stream.lineEnd();
+        return;
+      } // handle degenerate cases by moving the point
+
+
+      p1[0] += 2 * epsilon$2;
     }
 
     subject.push(x = new Intersection(p0, segment, null, true));
@@ -9147,17 +9151,11 @@ function clipCircle (radius) {
             point2,
             v = visible(lambda, phi),
             c = smallRadius ? v ? 0 : code(lambda, phi) : v ? code(lambda + (lambda < 0 ? pi$3 : -pi$3), phi) : 0;
-        if (!point0 && (v00 = v0 = v)) stream.lineStart(); // Handle degeneracies.
-        // TODO ignore if not clipping polygons.
+        if (!point0 && (v00 = v0 = v)) stream.lineStart();
 
         if (v !== v0) {
           point2 = intersect(point0, point1);
-
-          if (!point2 || pointEqual(point0, point2) || pointEqual(point1, point2)) {
-            point1[0] += epsilon$2;
-            point1[1] += epsilon$2;
-            v = visible(point1[0], point1[1]);
-          }
+          if (!point2 || pointEqual(point0, point2) || pointEqual(point1, point2)) point1[2] = 1;
         }
 
         if (v !== v0) {
@@ -9171,7 +9169,7 @@ function clipCircle (radius) {
           } else {
             // inside going out
             point2 = intersect(point0, point1);
-            stream.point(point2[0], point2[1]);
+            stream.point(point2[0], point2[1], 2);
             stream.lineEnd();
           }
 
@@ -9192,7 +9190,7 @@ function clipCircle (radius) {
               stream.point(t[1][0], t[1][1]);
               stream.lineEnd();
               stream.lineStart();
-              stream.point(t[0][0], t[0][1]);
+              stream.point(t[0][0], t[0][1], 3);
             }
           }
         }
@@ -19675,6 +19673,7 @@ var base = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
   exports.getId = getId;
+  exports.noop = noop;
   exports.walkTree = walkTree;
   exports.arrayFrom = arrayFrom;
   exports.flatMap = flatMap;
@@ -19686,6 +19685,9 @@ var base = createCommonjsModule(function (module, exports) {
   function getId() {
     globalIndex += 1;
     return "mm-".concat(uniqId, "-").concat(globalIndex);
+  }
+
+  function noop() {// noop
   }
 
   function walkTree(tree, callback) {
@@ -19761,11 +19763,12 @@ var base = createCommonjsModule(function (module, exports) {
 });
 unwrapExports(base);
 var base_1 = base.getId;
-var base_2 = base.walkTree;
-var base_3 = base.arrayFrom;
-var base_4 = base.flatMap;
-var base_5 = base.addClass;
-var base_6 = base.childSelector;
+var base_2 = base.noop;
+var base_3 = base.walkTree;
+var base_4 = base.arrayFrom;
+var base_5 = base.flatMap;
+var base_6 = base.addClass;
+var base_7 = base.childSelector;
 
 var html$1 = createCommonjsModule(function (module, exports) {
 
@@ -19840,7 +19843,6 @@ var loader = createCommonjsModule(function (module, exports) {
   exports.initializePlugins = initializePlugins;
   exports.persistJS = persistJS;
   exports.persistCSS = persistCSS;
-  exports.persistPlugins = persistPlugins;
 
   function buildCode(fn) {
     for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -20082,24 +20084,6 @@ var loader = createCommonjsModule(function (module, exports) {
       return (0, html$1.wrapHtml)('style', item.data);
     });
   }
-
-  function persistPlugins(plugins, context) {
-    var js = (0, base.flatMap)(plugins, function (plugin) {
-      return persistJS(plugin.scripts, context);
-    }).join('');
-    var css = (0, base.flatMap)(plugins, function (plugin) {
-      return persistCSS(plugin.styles);
-    }).join('');
-    var initializers = plugins.map(function (_ref5) {
-      var initialize = _ref5.initialize;
-      return initialize;
-    }).filter(Boolean);
-    return {
-      js: js,
-      css: css,
-      initializers: initializers
-    };
-  }
 });
 unwrapExports(loader);
 var loader_1 = loader.buildCode;
@@ -20109,7 +20093,6 @@ var loader_4 = loader.loadCSS;
 var loader_5 = loader.initializePlugins;
 var loader_6 = loader.persistJS;
 var loader_7 = loader.persistCSS;
-var loader_8 = loader.persistPlugins;
 
 var util = createCommonjsModule(function (module, exports) {
 
@@ -20181,6 +20164,7 @@ var prism = createCommonjsModule(function (module, exports) {
 
   exports.__esModule = true;
   exports.plugin = void 0;
+  var errors = {};
   var styles = [{
     type: 'stylesheet',
     data: {
@@ -20220,18 +20204,62 @@ var prism = createCommonjsModule(function (module, exports) {
 
         if (Prism.languages[lang]) {
           Prism.highlightElement(code);
-        } else {
+        } else if (!errors[lang]) {
           return lang;
         }
       }).filter(Boolean);
-
-      if (langs.length) {
-        Prism.plugins.autoloader.loadLanguages(langs, function () {
-          mm.setData();
-          mm.fit();
-        });
-      }
+      loadLanguagesAndRender(mm, langs);
     });
+  }
+
+  function loadLanguagesAndRender(_x, _x2) {
+    return _loadLanguagesAndRender.apply(this, arguments);
+  }
+
+  function _loadLanguagesAndRender() {
+    _loadLanguagesAndRender = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(mm, langs) {
+      var _window2, Prism;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (langs.length) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 2:
+              _window2 = window, Prism = _window2.Prism;
+              _context.prev = 3;
+              _context.next = 6;
+              return new Promise(function (resolve, reject) {
+                Prism.plugins.autoloader.loadLanguages(langs, resolve, reject);
+              });
+
+            case 6:
+              _context.next = 11;
+              break;
+
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](3);
+              errors[_context.t0] = true;
+
+            case 11:
+              mm.setData();
+              mm.fit();
+
+            case 13:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[3, 8]]);
+    }));
+    return _loadLanguagesAndRender.apply(this, arguments);
   }
 
   var plugin = {
@@ -20378,7 +20406,7 @@ var view = createCommonjsModule(function (module, exports) {
             nodeFont = _this$options.nodeFont;
         var id = this.state.id;
         var extraStyle = typeof style === 'function' ? style(id) : '';
-        var styleText = ".".concat(id, " a { color: #0097e6; }\n.").concat(id, " a:hover { color: #00a8ff; }\n.").concat(id, "-g > path { fill: none; }\n.").concat(id, "-fo > div { font: ").concat(nodeFont, "; white-space: nowrap; }\n.").concat(id, "-fo code { padding: .2em .4em; font-size: calc(1em - 2px); color: #555; background-color: #f0f0f0; border-radius: 2px; }\n.").concat(id, "-fo del { text-decoration: line-through; }\n.").concat(id, "-fo em { font-style: italic; }\n.").concat(id, "-fo strong { font-weight: 500; }\n.").concat(id, "-fo pre { margin: 0; }\n.").concat(id, "-fo pre[class*=language-] { padding: 0; }\n.").concat(id, "-g > g { cursor: pointer; }\n").concat(extraStyle, "\n");
+        var styleText = ".".concat(id, " a { color: #0097e6; }\n.").concat(id, " a:hover { color: #00a8ff; }\n.").concat(id, "-g > path { fill: none; }\n.").concat(id, "-fo > div { font: ").concat(nodeFont, "; white-space: nowrap; }\n.").concat(id, "-fo code { padding: .2em .4em; font-size: calc(1em - 2px); color: #555; background-color: #f0f0f0; border-radius: 2px; }\n.").concat(id, "-fo del { text-decoration: line-through; }\n.").concat(id, "-fo em { font-style: italic; }\n.").concat(id, "-fo strong { font-weight: 600; }\n.").concat(id, "-fo pre { margin: 0; }\n.").concat(id, "-fo pre[class*=language-] { padding: 0; }\n.").concat(id, "-g > g { cursor: pointer; }\n").concat(extraStyle, "\n");
         return styleText;
       }
     }, {
@@ -20669,7 +20697,7 @@ var view = createCommonjsModule(function (module, exports) {
         var naturalHeight = maxX - minX;
         var scale = Math.min(offsetWidth / naturalWidth * fitRatio, offsetHeight / naturalHeight * fitRatio, 2);
         var initialZoom = d3.zoomIdentity.translate((offsetWidth - naturalWidth * scale) / 2 - minY * scale, (offsetHeight - naturalHeight * scale) / 2 - minX * scale).scale(scale);
-        return this.transition(this.svg).call(this.zoom.transform, initialZoom).end();
+        return this.transition(this.svg).call(this.zoom.transform, initialZoom).end()["catch"](util.noop);
       }
     }, {
       key: "rescale",
@@ -20684,7 +20712,7 @@ var view = createCommonjsModule(function (module, exports) {
         var halfHeight = offsetHeight / 2;
         var transform = d3.zoomTransform(svgNode);
         var newTransform = transform.translate((halfWidth - transform.x) * (1 - scale) / transform.k, (halfHeight - transform.y) * (1 - scale) / transform.k).scale(scale);
-        return this.transition(this.svg).call(this.zoom.transform, newTransform).end();
+        return this.transition(this.svg).call(this.zoom.transform, newTransform).end()["catch"](util.noop);
       }
     }], [{
       key: "create",
@@ -21144,7 +21172,7 @@ var textarea;
 
 function decodeEntity(name) {
   textarea = textarea || document.createElement('textarea');
-  textarea.innerHTML = '&' + name;
+  textarea.innerHTML = '&' + name + ';';
   return textarea.value;
 }
 /**
@@ -27333,7 +27361,7 @@ unwrapExports(transform_1);
 var transform_2 = transform_1.buildTree;
 var transform_3 = transform_1.transform;
 
-/* src/components/markmap.svelte generated by Svelte v3.22.3 */
+/* src/components/markmap.svelte generated by Svelte v3.23.2 */
 
 const { console: console_1 } = globals;
 const file = "src/components/markmap.svelte";
@@ -27358,7 +27386,7 @@ function create_fragment(ctx) {
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, svg, anchor);
-			/*svg_binding*/ ctx[13](svg);
+			/*svg_binding*/ ctx[7](svg);
 		},
 		p: function update(ctx, [dirty]) {
 			if (dirty & /*style*/ 2) {
@@ -27369,7 +27397,7 @@ function create_fragment(ctx) {
 		o: noop$4,
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(svg);
-			/*svg_binding*/ ctx[13](null);
+			/*svg_binding*/ ctx[7](null);
 		}
 	};
 
@@ -27424,13 +27452,13 @@ function instance($$self, $$props, $$invalidate) {
 
 	onMount(async () => {
 		await loading;
-		$$invalidate(7, mm = view_4.create(el));
+		$$invalidate(8, mm = view_4.create(el));
 		update(content);
 		window.addEventListener("resize", onResize);
 	});
 
 	onDestroy(async () => {
-		$$invalidate(7, mm = null);
+		$$invalidate(8, mm = null);
 
 		{
 			window.removeEventListener("resize", onResize);
@@ -27448,7 +27476,8 @@ function instance($$self, $$props, $$invalidate) {
 
 	function svg_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
-			$$invalidate(0, el = $$value);
+			el = $$value;
+			$$invalidate(0, el);
 		});
 	}
 
@@ -27483,7 +27512,7 @@ function instance($$self, $$props, $$invalidate) {
 	});
 
 	$$self.$inject_state = $$props => {
-		if ("mm" in $$props) $$invalidate(7, mm = $$props.mm);
+		if ("mm" in $$props) $$invalidate(8, mm = $$props.mm);
 		if ("el" in $$props) $$invalidate(0, el = $$props.el);
 		if ("content" in $$props) $$invalidate(2, content = $$props.content);
 		if ("style" in $$props) $$invalidate(1, style = $$props.style);
@@ -27512,27 +27541,12 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		}
 
-		if ($$self.$$.dirty & /*mm, options*/ 136) {
+		if ($$self.$$.dirty & /*mm, options*/ 264) {
 			 if (mm && options) mm.setOptions(options);
 		}
 	};
 
-	return [
-		el,
-		style,
-		content,
-		options,
-		onReset,
-		onZoomIn,
-		onZoomOut,
-		mm,
-		promise,
-		cacheContent,
-		safeCaller,
-		onResize,
-		update,
-		svg_binding
-	];
+	return [el, style, content, options, onReset, onZoomIn, onZoomOut, svg_binding];
 }
 
 class Markmap_1 extends SvelteComponentDev {
@@ -27621,4 +27635,4 @@ class Markmap_1 extends SvelteComponentDev {
 	}
 }
 
-export { Markmap_1 as M, lodash_debounce as a, loading as l, plugins as p, transform_3 as t, util as u };
+export { Markmap_1 as M, lodash_debounce as a, loading as l, transform_3 as t, util as u };

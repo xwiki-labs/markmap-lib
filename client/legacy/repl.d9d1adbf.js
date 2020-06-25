@@ -22,7 +22,7 @@ import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
 import 'core-js/modules/web.url';
-import { y as createCommonjsModule, G as _toConsumableArray, z as unwrapExports, S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, N as onMount, O as onDestroy, v as validate_slots, Q as binding_callbacks, X as bind, a as space, e as element, c as create_component, P as svg_element, t as text, q as query_selector_all, b as detach_dev, f as claim_space, g as claim_element, h as children, k as claim_component, j as claim_text, m as attr_dev, l as add_location, n as insert_dev, o as append_dev, p as mount_component, V as run_all, T as listen_dev, Y as is_function, W as prevent_default, Z as add_flush_callback, u as transition_in, w as transition_out, x as destroy_component, M as globals } from './client.1f6480ea.js';
+import { y as createCommonjsModule, G as _toConsumableArray, z as unwrapExports, S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, N as onMount, O as onDestroy, v as validate_slots, Q as binding_callbacks, X as bind, a as space, e as element, c as create_component, P as svg_element, t as text, q as query_selector_all, b as detach_dev, f as claim_space, g as claim_element, h as children, k as claim_component, j as claim_text, m as attr_dev, l as add_location, n as insert_dev, o as append_dev, p as mount_component, T as listen_dev, Y as is_function, V as prevent_default, Z as add_flush_callback, u as transition_in, w as transition_out, x as destroy_component, W as run_all, M as globals } from './client.4c748dbb.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.async-iterator';
@@ -53,7 +53,7 @@ import 'core-js/modules/es.function.bind';
 import 'core-js/modules/es.object.define-property';
 import 'core-js/modules/es.object.get-own-property-descriptor';
 import 'core-js/modules/es.weak-map';
-import { u as util, p as plugins, M as Markmap_1, a as lodash_debounce, t as transform_3 } from './markmap.6619b1bc.js';
+import { u as util, M as Markmap_1, a as lodash_debounce, t as transform_3 } from './markmap.22d8d2c8.js';
 import 'core-js/modules/es.array.sort';
 import 'core-js/modules/es.string.trim';
 import 'core-js/modules/es.regexp.constructor';
@@ -107,7 +107,8 @@ var template_1 = createCommonjsModule(function (module, exports) {
   exports.__esModule = true;
   exports.fillTemplate = fillTemplate;
   var template = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n<title>Markmap</title>\n<style>\n* {\n  margin: 0;\n  padding: 0;\n}\n#mindmap {\n  display: block;\n  width: 100vw;\n  height: 100vh;\n}\n</style>\n<!--CSS-->\n</head>\n<body>\n<svg id=\"mindmap\"></svg>\n<!--JS-->\n</body>\n</html>\n";
-  var baseJs = ['https://cdn.jsdelivr.net/npm/d3@5', 'https://cdn.jsdelivr.net/npm/markmap-lib@0.7.8/dist/browser/view.min.js'].map(function (src) {
+  var version = "0.7.11";
+  var baseJs = ['https://cdn.jsdelivr.net/npm/d3@5', "https://cdn.jsdelivr.net/npm/markmap-lib@".concat(version, "/dist/browser/view.min.js")].map(function (src) {
     return {
       type: 'script',
       data: {
@@ -117,55 +118,58 @@ var template_1 = createCommonjsModule(function (module, exports) {
   });
 
   function fillTemplate(data, opts) {
-    var _ref = (0, util.persistPlugins)([(opts == null ? void 0 : opts.mathJax) && plugins.mathJax, (opts == null ? void 0 : opts.prism) && plugins.prism].filter(Boolean), opts),
-        js = _ref.js,
-        css = _ref.css,
-        initializers = _ref.initializers;
-
-    var jsList = [].concat(_toConsumableArray((0, util.persistJS)(baseJs)), [js], _toConsumableArray((0, util.persistJS)([{
+    var jsList = [].concat(_toConsumableArray((0, util.persistJS)(baseJs)), _toConsumableArray((0, util.persistJS)([{
       type: 'iife',
       data: {
-        fn: function fn(data) {
-          var Markmap = window.markmap.Markmap;
+        fn: function fn(data, init, items, opts) {
+          var _window$markmap = window.markmap,
+              Markmap = _window$markmap.Markmap,
+              loadPlugins = _window$markmap.loadPlugins;
+          (init ? init(loadPlugins, items, opts) : Promise.resolve()).then(function () {
+            Markmap.create('svg#mindmap', null, data);
+          });
+        },
+        getParams: function getParams(_ref) {
+          var data = _ref.data,
+              opts = _ref.opts;
+          var items = [(opts == null ? void 0 : opts.mathJax) && 'mathJax', (opts == null ? void 0 : opts.prism) && 'prism'].filter(Boolean);
+          var args = [data];
 
-          for (var _len = arguments.length, initializers = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            initializers[_key - 1] = arguments[_key];
+          if (items.length) {
+            args.push(function (loadPlugins, items, opts) {
+              return loadPlugins(items, opts);
+            }, items, opts);
           }
 
-          initializers.forEach(function (initialize) {
-            return initialize(Markmap);
-          });
-          Markmap.create('svg#mindmap', null, data);
-        },
-        getParams: function getParams(_ref2) {
-          var data = _ref2.data,
-              initializers = _ref2.initializers;
-          return [data].concat(_toConsumableArray(initializers));
+          return args;
         }
       }
     }], {
       data: data,
-      initializers: initializers
+      opts: opts
     })));
-    var html = template.replace('<!--CSS-->', css).replace('<!--JS-->', jsList.join(''));
+    var html = template.replace('<!--CSS-->', '').replace('<!--JS-->', function () {
+      return jsList.join('');
+    });
     return html;
   }
 });
 unwrapExports(template_1);
 var template_2 = template_1.fillTemplate;
 
-/* src/routes/repl.svelte generated by Svelte v3.22.3 */
+/* src/routes/repl.svelte generated by Svelte v3.23.2 */
 
 const { document: document_1 } = globals;
 const file = "src/routes/repl.svelte";
 
 function create_fragment(ctx) {
 	let t0;
-	let div5;
+	let div7;
 	let div0;
 	let t1;
-	let div4;
+	let div6;
 	let div2;
+	let markmap;
 	let updating_el;
 	let updating_onReset;
 	let updating_onZoomIn;
@@ -184,26 +188,35 @@ function create_fragment(ctx) {
 	let circle2;
 	let path2;
 	let t5;
+	let div5;
 	let div3;
-	let a;
+	let a0;
 	let t6;
+	let t7;
+	let div4;
+	let a1;
+	let t8;
+	let t9;
+	let span;
+	let t10;
 	let current;
+	let mounted;
 	let dispose;
 
 	function markmap_el_binding(value) {
-		/*markmap_el_binding*/ ctx[11].call(null, value);
+		/*markmap_el_binding*/ ctx[9].call(null, value);
 	}
 
 	function markmap_onReset_binding(value) {
-		/*markmap_onReset_binding*/ ctx[12].call(null, value);
+		/*markmap_onReset_binding*/ ctx[10].call(null, value);
 	}
 
 	function markmap_onZoomIn_binding(value) {
-		/*markmap_onZoomIn_binding*/ ctx[13].call(null, value);
+		/*markmap_onZoomIn_binding*/ ctx[11].call(null, value);
 	}
 
 	function markmap_onZoomOut_binding(value) {
-		/*markmap_onZoomOut_binding*/ ctx[14].call(null, value);
+		/*markmap_onZoomOut_binding*/ ctx[12].call(null, value);
 	}
 
 	let markmap_props = { content: /*content*/ ctx[2] };
@@ -224,7 +237,7 @@ function create_fragment(ctx) {
 		markmap_props.onZoomOut = /*onZoomOut*/ ctx[5];
 	}
 
-	const markmap = new Markmap_1({ props: markmap_props, $$inline: true });
+	markmap = new Markmap_1({ props: markmap_props, $$inline: true });
 	binding_callbacks.push(() => bind(markmap, "el", markmap_el_binding));
 	binding_callbacks.push(() => bind(markmap, "onReset", markmap_onReset_binding));
 	binding_callbacks.push(() => bind(markmap, "onZoomIn", markmap_onZoomIn_binding));
@@ -233,10 +246,10 @@ function create_fragment(ctx) {
 	const block = {
 		c: function create() {
 			t0 = space();
-			div5 = element("div");
+			div7 = element("div");
 			div0 = element("div");
 			t1 = space();
-			div4 = element("div");
+			div6 = element("div");
 			div2 = element("div");
 			create_component(markmap.$$.fragment);
 			t2 = space();
@@ -253,23 +266,31 @@ function create_fragment(ctx) {
 			circle2 = svg_element("circle");
 			path2 = svg_element("path");
 			t5 = space();
+			div5 = element("div");
 			div3 = element("div");
-			a = element("a");
+			a0 = element("a");
 			t6 = text("Download as interactive HTML");
+			t7 = space();
+			div4 = element("div");
+			a1 = element("a");
+			t8 = text("Download as SVG");
+			t9 = space();
+			span = element("span");
+			t10 = text("⚠️");
 			this.h();
 		},
 		l: function claim(nodes) {
 			const head_nodes = query_selector_all("[data-svelte=\"svelte-r18bnt\"]", document_1.head);
 			head_nodes.forEach(detach_dev);
 			t0 = claim_space(nodes);
-			div5 = claim_element(nodes, "DIV", { class: true });
-			var div5_nodes = children(div5);
-			div0 = claim_element(div5_nodes, "DIV", { class: true });
+			div7 = claim_element(nodes, "DIV", { class: true });
+			var div7_nodes = children(div7);
+			div0 = claim_element(div7_nodes, "DIV", { class: true });
 			children(div0).forEach(detach_dev);
-			t1 = claim_space(div5_nodes);
-			div4 = claim_element(div5_nodes, "DIV", { class: true });
-			var div4_nodes = children(div4);
-			div2 = claim_element(div4_nodes, "DIV", { class: true });
+			t1 = claim_space(div7_nodes);
+			div6 = claim_element(div7_nodes, "DIV", { class: true });
+			var div6_nodes = children(div6);
+			div2 = claim_element(div6_nodes, "DIV", { class: true });
 			var div2_nodes = children(div2);
 			claim_component(markmap.$$.fragment, div2_nodes);
 			t2 = claim_space(div2_nodes);
@@ -378,90 +399,113 @@ function create_fragment(ctx) {
 			svg2_nodes.forEach(detach_dev);
 			div1_nodes.forEach(detach_dev);
 			div2_nodes.forEach(detach_dev);
-			t5 = claim_space(div4_nodes);
-			div3 = claim_element(div4_nodes, "DIV", { class: true });
+			t5 = claim_space(div6_nodes);
+			div5 = claim_element(div6_nodes, "DIV", {});
+			var div5_nodes = children(div5);
+			div3 = claim_element(div5_nodes, "DIV", { class: true });
 			var div3_nodes = children(div3);
-			a = claim_element(div3_nodes, "A", {});
-			var a_nodes = children(a);
-			t6 = claim_text(a_nodes, "Download as interactive HTML");
-			a_nodes.forEach(detach_dev);
+			a0 = claim_element(div3_nodes, "A", {});
+			var a0_nodes = children(a0);
+			t6 = claim_text(a0_nodes, "Download as interactive HTML");
+			a0_nodes.forEach(detach_dev);
 			div3_nodes.forEach(detach_dev);
+			t7 = claim_space(div5_nodes);
+			div4 = claim_element(div5_nodes, "DIV", { class: true, title: true });
+			var div4_nodes = children(div4);
+			a1 = claim_element(div4_nodes, "A", {});
+			var a1_nodes = children(a1);
+			t8 = claim_text(a1_nodes, "Download as SVG");
+			a1_nodes.forEach(detach_dev);
+			t9 = claim_space(div4_nodes);
+			span = claim_element(div4_nodes, "SPAN", { class: true });
+			var span_nodes = children(span);
+			t10 = claim_text(span_nodes, "⚠️");
+			span_nodes.forEach(detach_dev);
 			div4_nodes.forEach(detach_dev);
 			div5_nodes.forEach(detach_dev);
+			div6_nodes.forEach(detach_dev);
+			div7_nodes.forEach(detach_dev);
 			this.h();
 		},
 		h: function hydrate() {
 			document_1.title = "Try Markmap";
 			attr_dev(div0, "class", "flex-1 min-w-0 border border-gray-300");
-			add_location(div0, file, 99, 2, 2117);
+			add_location(div0, file, 104, 2, 2289);
 			attr_dev(circle0, "cx", "10");
 			attr_dev(circle0, "cy", "10");
 			attr_dev(circle0, "r", "9");
 			attr_dev(circle0, "fill", "none");
 			attr_dev(circle0, "stroke-width", "0.5");
 			attr_dev(circle0, "stroke", "currentColor");
-			add_location(circle0, file, 111, 10, 2606);
+			add_location(circle0, file, 116, 10, 2778);
 			attr_dev(path0, "fill", "none");
 			attr_dev(path0, "stroke-width", "1");
 			attr_dev(path0, "stroke", "currentColor");
 			attr_dev(path0, "d", "M10 6 v8 M6 10 h8");
-			add_location(path0, file, 112, 10, 2702);
+			add_location(path0, file, 117, 10, 2874);
 			attr_dev(svg0, "width", "20");
 			attr_dev(svg0, "height", "20");
 			attr_dev(svg0, "viewBox", "0 0 20 20");
-			add_location(svg0, file, 110, 8, 2527);
+			add_location(svg0, file, 115, 8, 2699);
 			attr_dev(circle1, "cx", "10");
 			attr_dev(circle1, "cy", "10");
 			attr_dev(circle1, "r", "9");
 			attr_dev(circle1, "fill", "none");
 			attr_dev(circle1, "stroke-width", "0.5");
 			attr_dev(circle1, "stroke", "currentColor");
-			add_location(circle1, file, 120, 10, 2945);
+			add_location(circle1, file, 125, 10, 3117);
 			attr_dev(path1, "fill", "none");
 			attr_dev(path1, "stroke-width", "1");
 			attr_dev(path1, "stroke", "currentColor");
 			attr_dev(path1, "d", "M6 10 h8");
-			add_location(path1, file, 121, 10, 3041);
+			add_location(path1, file, 126, 10, 3213);
 			attr_dev(svg1, "width", "20");
 			attr_dev(svg1, "height", "20");
 			attr_dev(svg1, "viewBox", "0 0 20 20");
-			add_location(svg1, file, 119, 8, 2865);
+			add_location(svg1, file, 124, 8, 3037);
 			attr_dev(circle2, "cx", "10");
 			attr_dev(circle2, "cy", "10");
 			attr_dev(circle2, "r", "9");
 			attr_dev(circle2, "fill", "none");
 			attr_dev(circle2, "stroke-width", "0.5");
 			attr_dev(circle2, "stroke", "currentColor");
-			add_location(circle2, file, 129, 10, 3273);
+			add_location(circle2, file, 134, 10, 3445);
 			attr_dev(path2, "fill", "none");
 			attr_dev(path2, "stroke-width", "1");
 			attr_dev(path2, "stroke", "currentColor");
 			attr_dev(path2, "d", "M5 9 v-3 h3 M5 11 v3 h3 M15 9 v-3 h-3 M15 11 v3 h-3");
-			add_location(path2, file, 130, 10, 3369);
+			add_location(path2, file, 135, 10, 3541);
 			attr_dev(svg2, "width", "20");
 			attr_dev(svg2, "height", "20");
 			attr_dev(svg2, "viewBox", "0 0 20 20");
-			add_location(svg2, file, 128, 8, 3195);
+			add_location(svg2, file, 133, 8, 3367);
 			attr_dev(div1, "class", "buttons absolute right-0 bottom-0 mr-2 mb-2");
-			add_location(div1, file, 109, 6, 2461);
+			add_location(div1, file, 114, 6, 2633);
 			attr_dev(div2, "class", "markmap-wrapper flex-1");
-			add_location(div2, file, 101, 4, 2245);
-			add_location(a, file, 140, 6, 3610);
-			attr_dev(div3, "class", "p-2");
-			add_location(div3, file, 139, 4, 3586);
-			attr_dev(div4, "class", "flex-1 min-w-0 flex flex-col");
-			add_location(div4, file, 100, 2, 2198);
-			attr_dev(div5, "class", "repl");
-			add_location(div5, file, 98, 0, 2096);
+			add_location(div2, file, 106, 4, 2417);
+			add_location(a0, file, 146, 8, 3815);
+			attr_dev(div3, "class", "inline-block px-4 py-2");
+			add_location(div3, file, 145, 6, 3770);
+			add_location(a1, file, 149, 8, 4012);
+			attr_dev(span, "class", "text-red-500");
+			add_location(span, file, 150, 8, 4083);
+			attr_dev(div4, "class", "inline-block px-4 py-2");
+			attr_dev(div4, "title", "SVG does not work well with PrismJS and MathJax");
+			add_location(div4, file, 148, 6, 3911);
+			add_location(div5, file, 144, 4, 3758);
+			attr_dev(div6, "class", "flex-1 min-w-0 flex flex-col");
+			add_location(div6, file, 105, 2, 2370);
+			attr_dev(div7, "class", "repl");
+			add_location(div7, file, 103, 0, 2268);
 		},
-		m: function mount(target, anchor, remount) {
+		m: function mount(target, anchor) {
 			insert_dev(target, t0, anchor);
-			insert_dev(target, div5, anchor);
-			append_dev(div5, div0);
-			/*div0_binding*/ ctx[10](div0);
-			append_dev(div5, t1);
-			append_dev(div5, div4);
-			append_dev(div4, div2);
+			insert_dev(target, div7, anchor);
+			append_dev(div7, div0);
+			/*div0_binding*/ ctx[8](div0);
+			append_dev(div7, t1);
+			append_dev(div7, div6);
+			append_dev(div6, div2);
 			mount_component(markmap, div2, null);
 			append_dev(div2, t2);
 			append_dev(div2, div1);
@@ -476,46 +520,58 @@ function create_fragment(ctx) {
 			append_dev(div1, svg2);
 			append_dev(svg2, circle2);
 			append_dev(svg2, path2);
-			append_dev(div4, t5);
-			append_dev(div4, div3);
-			append_dev(div3, a);
-			append_dev(a, t6);
+			append_dev(div6, t5);
+			append_dev(div6, div5);
+			append_dev(div5, div3);
+			append_dev(div3, a0);
+			append_dev(a0, t6);
+			append_dev(div5, t7);
+			append_dev(div5, div4);
+			append_dev(div4, a1);
+			append_dev(a1, t8);
+			append_dev(div4, t9);
+			append_dev(div4, span);
+			append_dev(span, t10);
 			current = true;
-			if (remount) run_all(dispose);
 
-			dispose = [
-				listen_dev(
-					svg0,
-					"click",
-					function () {
-						if (is_function(/*onZoomIn*/ ctx[4])) /*onZoomIn*/ ctx[4].apply(this, arguments);
-					},
-					false,
-					false,
-					false
-				),
-				listen_dev(
-					svg1,
-					"click",
-					function () {
-						if (is_function(/*onZoomOut*/ ctx[5])) /*onZoomOut*/ ctx[5].apply(this, arguments);
-					},
-					false,
-					false,
-					false
-				),
-				listen_dev(
-					svg2,
-					"click",
-					function () {
-						if (is_function(/*onReset*/ ctx[3])) /*onReset*/ ctx[3].apply(this, arguments);
-					},
-					false,
-					false,
-					false
-				),
-				listen_dev(a, "click", prevent_default(/*onDownloadHTML*/ ctx[6]), false, true, false)
-			];
+			if (!mounted) {
+				dispose = [
+					listen_dev(
+						svg0,
+						"click",
+						function () {
+							if (is_function(/*onZoomIn*/ ctx[4])) /*onZoomIn*/ ctx[4].apply(this, arguments);
+						},
+						false,
+						false,
+						false
+					),
+					listen_dev(
+						svg1,
+						"click",
+						function () {
+							if (is_function(/*onZoomOut*/ ctx[5])) /*onZoomOut*/ ctx[5].apply(this, arguments);
+						},
+						false,
+						false,
+						false
+					),
+					listen_dev(
+						svg2,
+						"click",
+						function () {
+							if (is_function(/*onReset*/ ctx[3])) /*onReset*/ ctx[3].apply(this, arguments);
+						},
+						false,
+						false,
+						false
+					),
+					listen_dev(a0, "click", prevent_default(/*onDownloadHTML*/ ctx[7]), false, true, false),
+					listen_dev(a1, "click", prevent_default(/*onDownloadSVG*/ ctx[6]), false, true, false)
+				];
+
+				mounted = true;
+			}
 		},
 		p: function update(new_ctx, [dirty]) {
 			ctx = new_ctx;
@@ -559,9 +615,10 @@ function create_fragment(ctx) {
 		},
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(t0);
-			if (detaching) detach_dev(div5);
-			/*div0_binding*/ ctx[10](null);
+			if (detaching) detach_dev(div7);
+			/*div0_binding*/ ctx[8](null);
 			destroy_component(markmap);
+			mounted = false;
 			run_all(dispose);
 		}
 	};
@@ -592,6 +649,11 @@ function instance($$self, $$props, $$invalidate) {
 	let onReset;
 	let onZoomIn;
 	let onZoomOut;
+
+	function onDownloadSVG() {
+		const svgHtml = svgEl.outerHTML.replace(/<br>/g, "<br/>");
+		download("markmap.svg", "data:image/svg;utf8," + encodeURIComponent(svgHtml));
+	}
 
 	function onDownloadHTML() {
 		const root = transform_3(content || "");
@@ -627,8 +689,8 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	onMount(async () => {
-		const { default: CodeMirror } = await import('./codemirror.79b2ad7f.js');
-		await import('./markdown.d97c9292.js');
+		const { default: CodeMirror } = await import('./codemirror.8800c6ef.js');
+		await import('./markdown.280cd828.js');
 
 		cm = CodeMirror(editorEl, {
 			lineNumbers: true,
@@ -681,7 +743,8 @@ function instance($$self, $$props, $$invalidate) {
 
 	function div0_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
-			$$invalidate(0, editorEl = $$value);
+			editorEl = $$value;
+			$$invalidate(0, editorEl);
 		});
 	}
 
@@ -720,6 +783,7 @@ function instance($$self, $$props, $$invalidate) {
 		onZoomIn,
 		onZoomOut,
 		download,
+		onDownloadSVG,
 		onDownloadHTML,
 		loadData,
 		update
@@ -746,10 +810,8 @@ function instance($$self, $$props, $$invalidate) {
 		onReset,
 		onZoomIn,
 		onZoomOut,
+		onDownloadSVG,
 		onDownloadHTML,
-		cm,
-		loadData,
-		update,
 		div0_binding,
 		markmap_el_binding,
 		markmap_onReset_binding,

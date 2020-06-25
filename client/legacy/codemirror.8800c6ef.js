@@ -22,7 +22,7 @@ import 'core-js/modules/web.dom-collections.for-each';
 import 'core-js/modules/web.dom-collections.iterator';
 import 'core-js/modules/web.timers';
 import 'core-js/modules/web.url';
-import { y as createCommonjsModule, K as commonjsGlobal, _ as _typeof } from './client.1f6480ea.js';
+import { y as createCommonjsModule, K as commonjsGlobal, _ as _typeof } from './client.4c748dbb.js';
 import 'core-js/modules/es.symbol';
 import 'core-js/modules/es.symbol.description';
 import 'core-js/modules/es.symbol.async-iterator';
@@ -4584,7 +4584,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
       try {
         x = e.clientX - space.left;
         y = e.clientY - space.top;
-      } catch (e) {
+      } catch (e$1) {
         return null;
       }
 
@@ -9748,7 +9748,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
             cm.replaceSelection(text$1, "around", "paste");
             cm.display.input.focus();
           }
-        } catch (e) {}
+        } catch (e$1) {}
       }
     }
 
@@ -11504,7 +11504,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
         try {
           mX = e.clientX;
           mY = e.clientY;
-        } catch (e) {
+        } catch (e$1) {
           return false;
         }
       }
@@ -11645,7 +11645,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
           _replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length));
         }
       });
-      option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
+      option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200c\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
         cm.state.specialChars = new RegExp(val.source + (val.test("\t") ? "" : "|\t"), "g");
 
         if (old != Init) {
@@ -14660,7 +14660,7 @@ var codemirror = createCommonjsModule(function (module, exports) {
 
     CodeMirror.fromTextArea = fromTextArea;
     addLegacyProps(CodeMirror);
-    CodeMirror.version = "5.54.0";
+    CodeMirror.version = "5.55.0";
     return CodeMirror;
   });
 });
