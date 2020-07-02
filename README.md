@@ -12,6 +12,15 @@ This project is heavily inspired by [Markmap](https://github.com/dundalek/markma
 
 Node.js >= 10 is required.
 
+## CryptPad Build
+
+```sh
+$ npm install
+$ npm run build
+```
+
+The result will be in `./dist/browser/`
+
 ## Usage
 
 ### Command-line

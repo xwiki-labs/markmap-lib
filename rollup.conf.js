@@ -6,7 +6,7 @@ const DIST = defaultOptions.distDir;
 const BANNER = `/*! ${pkg.name} v${pkg.version} | ${pkg.license} License */`;
 
 const globalList = [
-  'd3',
+  //'d3',
 ];
 const external = getRollupExternal();
 const bundleOptions = {
@@ -24,12 +24,13 @@ const rollupConfig = [
       }),
     },
     output: {
-      format: 'iife',
+      format: 'amd',
+      browser: true,
       file: `${DIST}/browser/view.js`,
       name: 'markmap',
-      globals: {
+      /*globals: {
         d3: 'd3',
-      },
+      },*/
       ...bundleOptions,
     },
     minify: true,
@@ -44,7 +45,8 @@ const rollupConfig = [
       }),
     },
     output: {
-      format: 'iife',
+      format: 'amd',
+      browser: true,
       file: `${DIST}/browser/transform.js`,
       name: 'markmap',
       ...bundleOptions,
